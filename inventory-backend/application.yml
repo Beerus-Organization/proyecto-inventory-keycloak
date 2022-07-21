@@ -1,0 +1,24 @@
+server:
+  port: 8082
+  servlet:
+    context-path: /api
+
+spring:
+  application:
+    name: microservices-buy-stocks
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3308/buy_spring_boot?createIfNotExists=true&verifyServerCertificate=false&useSSL=false&requireSSL=false
+    username: docker
+    password: docker
+  jackson:
+    default-property-inclusion: non_null
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL5Dialect
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5Dialect
+    show-sql: true
+
