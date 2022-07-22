@@ -1,4 +1,4 @@
-package io.github.emfsilva.model;
+package io.github.emfsilva.inventory.model;
 
 import lombok.Data;
 
