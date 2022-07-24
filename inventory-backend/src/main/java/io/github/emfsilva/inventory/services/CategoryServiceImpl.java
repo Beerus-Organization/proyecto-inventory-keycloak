@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -123,7 +122,7 @@ public class CategoryServiceImpl implements ICategoryService {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
 
-        return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @Override
@@ -132,17 +131,22 @@ public class CategoryServiceImpl implements ICategoryService {
         CategoryResponseRest response = new CategoryResponseRest();
 
         try {
+            var categorySearch = categoryDao.findById(id);
+
+            if (categorySearch.isPresent()) {
                 categoryDao.deleteById(id);
                 response.setMetadata("Request OK", "00", "Request success");
+            } else {
+                response.setMetadata("Request NOK", "-1", "Category not found");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+            }
 
-        }catch (Exception e) {
+        } catch (Exception e) {
             response.setMetadata("Request NOK", "-1", "Error to delete category");
             LOGGER.info("Error to delete {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
 
-        return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
-
-
 }
