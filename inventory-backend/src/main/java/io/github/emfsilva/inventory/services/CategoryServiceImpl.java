@@ -79,7 +79,7 @@ public class CategoryServiceImpl implements ICategoryService {
         List<Category> list = new ArrayList<>();
 
         try {
-            Category categorySaved = categoryDao.save(category);
+            var categorySaved = categoryDao.save(category);
             list.add(categorySaved);
             response.getCategoryResponse().setCategory(list);
             response.setMetadata("Request OK", "00", "Request success");
@@ -90,6 +90,39 @@ public class CategoryServiceImpl implements ICategoryService {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
 
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
+
+    @Override
+    @Transactional
+    public ResponseEntity<CategoryResponseRest> update(Category category, Long id) {
+        CategoryResponseRest response = new CategoryResponseRest();
+        List<Category> list = new ArrayList<>();
+
+        try {
+            var categorySearch = categoryDao.findById(id);
+
+            if (categorySearch.isPresent()) {
+                categorySearch.get().setName(category.getName());
+                categorySearch.get().setDescription(category.getDescription());
+                Category categoryUpdate = categoryDao.save(categorySearch.get());
+
+                list.add(categoryUpdate);
+                response.getCategoryResponse().setCategory(list);
+                response.setMetadata("Request OK", "00", "Request success");
+
+            } else {
+                response.setMetadata("Request NOK", "-1", "Category not found");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+            }
+
+        } catch (Exception e) {
+            response.setMetadata("Request NOK", "-1", "Error to update category");
+            LOGGER.info("Error to search {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
+
+        return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
+    }
+
 }

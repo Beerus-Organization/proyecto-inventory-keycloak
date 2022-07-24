@@ -34,4 +34,11 @@ public class CategoryRestController {
     public ResponseEntity<CategoryResponseRest> save (@RequestBody @Valid Category category) {
         return  categoryService.save(category);
     }
+
+    @PutMapping("categories/{id}")
+    public ResponseEntity<CategoryResponseRest> update(@PathVariable Long id,
+                                                       @RequestBody @Valid Category category) {
+        return categoryService.update(category, id);
+
+    }
 }
