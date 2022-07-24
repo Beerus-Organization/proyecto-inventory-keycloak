@@ -36,9 +36,12 @@ public class CategoryRestController {
     }
 
     @PutMapping("categories/{id}")
-    public ResponseEntity<CategoryResponseRest> update(@PathVariable Long id,
-                                                       @RequestBody @Valid Category category) {
+    public ResponseEntity<CategoryResponseRest> update(@PathVariable Long id, @RequestBody @Valid Category category) {
         return categoryService.update(category, id);
+    }
 
+    @DeleteMapping("categories/{id}")
+    public ResponseEntity<CategoryResponseRest> delete(@PathVariable Long id) {
+        return categoryService.delete(id);
     }
 }
