@@ -22,7 +22,7 @@ export class CategoryComponent implements OnInit {
     },
     error: (error:any) => {
       console.log("respusta", error)
-    }
-  })
+      }
+    })
   }
 }
