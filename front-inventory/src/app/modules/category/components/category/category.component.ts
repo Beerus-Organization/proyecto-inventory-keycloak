@@ -4,6 +4,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { elementAt } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar, MatSnackBarRef, SimpleSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-category',
@@ -13,7 +14,7 @@ import { MatDialog } from '@angular/material/dialog';
 export class CategoryComponent implements OnInit {
 
   constructor(private categoryService: CategoryService,
-              public dialog: MatDialog) { }
+              public dialog: MatDialog, private snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
     this.getCategories();
@@ -54,10 +55,32 @@ export class CategoryComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result:any) => {
 
+      if(result == 1){
+        this.openSnackBar("Categoria Agregada", "OK");
+        this.getCategories();
+
+      }else if (result == 2) {
+        this.openFailureSnackBar("Error al guardar categoria", "Error");
+        this.getCategories();
+      }
     });
   }
 
-}
+  openSnackBar(message: string, action: string): MatSnackBarRef<SimpleSnackBar>{
+  return this.snackBar.open(message, action, {
+    duration: 3000,
+    panelClass: ['green-snackbar', 'login-snackbar'],
+   });
+  }
+  //Snackbar that opens with failure background
+  openFailureSnackBar(message: string, action: string): MatSnackBarRef<SimpleSnackBar>{
+  return this.snackBar.open(message, action, {
+      duration: 3000,
+      panelClass: ['red-snackbar', 'login-snackbar'],
+    });
+   }
+  }
+
 export interface CategoryElement {
   description: string;
   id: number;
