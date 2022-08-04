@@ -1,6 +1,6 @@
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { CategoryService } from './../../../shared/services/category.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
@@ -12,12 +12,18 @@ export class NewCategoryComponent implements OnInit {
 
   public categoryForm: FormGroup;
   constructor(private formBuilder: FormBuilder, private categoryService: CategoryService,
-              private dialogRef: MatDialogRef<NewCategoryComponent>) {
+              private dialogRef: MatDialogRef<NewCategoryComponent>,
+              @Inject(MAT_DIALOG_DATA) public data: any) {
+                console.log(data);
 
       this.categoryForm = this.formBuilder.group( {
         name: ['', Validators.required],
         description: ['', Validators.required]
       });
+
+      if(data != null) {
+        this.updateForm(data);
+      }
    }
 
    onSave() {
@@ -41,6 +47,14 @@ export class NewCategoryComponent implements OnInit {
 
    onCancel() {
     this.dialogRef.close(3);
+   }
+
+   updateForm(data: any) {
+
+    this.categoryForm = this.formBuilder.group( {
+      name: [data.name, Validators.required],
+      description: [data.description, Validators.required]
+    });
    }
 
   ngOnInit(): void {

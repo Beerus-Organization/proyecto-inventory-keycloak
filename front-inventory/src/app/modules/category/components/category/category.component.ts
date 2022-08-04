@@ -66,14 +66,32 @@ export class CategoryComponent implements OnInit {
     });
   }
 
-  openSnackBar(message: string, action: string): MatSnackBarRef<SimpleSnackBar>{
+  edit(id:number, name: string, description: string) {
+    const dialogRef = this.dialog.open(NewCategoryComponent, {
+      data: {id: id, name: name, description: description}
+    });
+
+    dialogRef.afterClosed().subscribe((result:any) => {
+
+      if(result == 1){
+        this.openSnackBar("Categoria actualizada", "OK");
+        this.getCategories();
+
+      }else if (result == 2) {
+        this.openFailureSnackBar("Error al actualizar categoria", "Error");
+        this.getCategories();
+      }
+    });
+  }
+
+  private openSnackBar(message: string, action: string): MatSnackBarRef<SimpleSnackBar>{
   return this.snackBar.open(message, action, {
     duration: 3000,
     panelClass: ['green-snackbar', 'login-snackbar'],
    });
   }
   //Snackbar that opens with failure background
-  openFailureSnackBar(message: string, action: string): MatSnackBarRef<SimpleSnackBar>{
+  private openFailureSnackBar(message: string, action: string): MatSnackBarRef<SimpleSnackBar>{
   return this.snackBar.open(message, action, {
       duration: 3000,
       panelClass: ['red-snackbar', 'login-snackbar'],
