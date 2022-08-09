@@ -11,10 +11,12 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 export class NewCategoryComponent implements OnInit {
 
   public categoryForm: FormGroup;
+  estadoFormulario :string = "";
   constructor(private formBuilder: FormBuilder, private categoryService: CategoryService,
               private dialogRef: MatDialogRef<NewCategoryComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any) {
                 console.log(data);
+                this.estadoFormulario = "Agregar";
 
       this.categoryForm = this.formBuilder.group( {
         name: ['', Validators.required],
@@ -23,6 +25,7 @@ export class NewCategoryComponent implements OnInit {
 
       if(data != null) {
         this.updateForm(data);
+        this.estadoFormulario = "Actualizar";
       }
    }
 
@@ -32,17 +35,33 @@ export class NewCategoryComponent implements OnInit {
       description: this.categoryForm.get('description')?.value
     }
 
-    this.categoryService.saveCategories(data)
-    .subscribe({
-    next: (data: any) => {
-      this.dialogRef.close(1);
-      console.log(data);
-    },
-    error: (error: any) => {
-      this.dialogRef.close(2);
-      console.log(error);
+    if(this.data != null) {
+      // update registre
+      this.categoryService.updateCategorie(data, this.data.id)
+      .subscribe({
+        next: (data: any) => {
+          this.dialogRef.close(1);
+        }, error: (error: any) => {
+          this.dialogRef.close(2);
+        }
       }
-    })
+    );
+  }
+
+    else {
+      // create a new registre
+      this.categoryService.saveCategories(data)
+      .subscribe({
+      next: (data: any) => {
+        this.dialogRef.close(1);
+        console.log(data);
+      },
+      error: (error: any) => {
+        this.dialogRef.close(2);
+        console.log(error);
+        }
+      })
+    }
   }
 
    onCancel() {

@@ -68,6 +68,7 @@ export class CategoryComponent implements OnInit {
 
   edit(id:number, name: string, description: string) {
     const dialogRef = this.dialog.open(NewCategoryComponent, {
+      width: '450px',
       data: {id: id, name: name, description: description}
     });
 
