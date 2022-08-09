@@ -1,3 +1,4 @@
+import { ConfirmComponent } from './../../../shared/components/confirm/confirm.component';
 import { NewCategoryComponent } from './../new-category/new-category.component';
 import { CategoryService } from './../../../shared/services/category.service';
 import { Component, OnInit } from '@angular/core';
@@ -23,13 +24,14 @@ export class CategoryComponent implements OnInit {
   displayedColumns: string[] = ['id', 'name', 'description', 'actions'];
   dataSource = new MatTableDataSource<CategoryElement>();
 
+
   getCategories() {
     this.categoryService.getCategories().subscribe({
     next: (data:any) => {
-      console.log("respusta",data);
       this.processCategoriesResponse(data);
     },
     error: (error:any) => {
+      this.openFailureSnackBar("Error al mostrar categoria", "Error")
       console.log("respusta", error)
       }
     })
@@ -83,6 +85,26 @@ export class CategoryComponent implements OnInit {
         this.getCategories();
       }
     });
+  }
+
+  // delete
+  delete(id: any) {
+    const dialogRef = this.dialog.open( ConfirmComponent, {
+      data: {id: id}
+    });
+
+    dialogRef.afterClosed().subscribe((result:any) => {
+
+      if(result == 1){
+        this.openSnackBar("Categoria Eliminada", "OK");
+        this.getCategories();
+
+      }else if (result == 2) {
+        this.openFailureSnackBar("Error al eliminar categoria", "Error");
+        this.getCategories();
+      }
+    });
+
   }
 
   private openSnackBar(message: string, action: string): MatSnackBarRef<SimpleSnackBar>{
