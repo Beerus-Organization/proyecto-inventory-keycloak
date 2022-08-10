@@ -94,7 +94,6 @@ export class CategoryComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((result:any) => {
-
       if(result == 1){
         this.openSnackBar("Categoria Eliminada", "OK");
         this.getCategories();
@@ -104,7 +103,17 @@ export class CategoryComponent implements OnInit {
         this.getCategories();
       }
     });
+  }
 
+  buscar(termino: string) {
+    if(termino.length === 0) {
+      return this.getCategories();
+    } else {
+      this.categoryService.getCategorieById(termino)
+      .subscribe({next: (rest: any) => {
+        this.processCategoriesResponse(rest);
+      }});
+    }
   }
 
   private openSnackBar(message: string, action: string): MatSnackBarRef<SimpleSnackBar>{
