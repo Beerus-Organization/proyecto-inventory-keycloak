@@ -1,11 +1,12 @@
 import { ConfirmComponent } from './../../../shared/components/confirm/confirm.component';
 import { NewCategoryComponent } from './../new-category/new-category.component';
 import { CategoryService } from './../../../shared/services/category.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { elementAt } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar, MatSnackBarRef, SimpleSnackBar } from '@angular/material/snack-bar';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-category',
@@ -24,6 +25,8 @@ export class CategoryComponent implements OnInit {
   displayedColumns: string[] = ['id', 'name', 'description', 'actions'];
   dataSource = new MatTableDataSource<CategoryElement>();
 
+  @ViewChild(MatPaginator)
+  paginator!: MatPaginator;
 
   getCategories() {
     this.categoryService.getCategories().subscribe({
@@ -47,6 +50,7 @@ export class CategoryComponent implements OnInit {
       });
 
       this.dataSource = new MatTableDataSource<CategoryElement>(dataCategory);
+      this.dataSource.paginator = this.paginator;
     }
   }
 
@@ -106,7 +110,7 @@ export class CategoryComponent implements OnInit {
   }
 
   buscar(termino: string) {
-    if(termino.length === 0) {
+    if(termino.length === 3) {
       return this.getCategories();
     } else {
       this.categoryService.getCategorieById(termino)
