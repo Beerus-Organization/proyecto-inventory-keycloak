@@ -1,8 +1,9 @@
-package io.github.emfsilva.inventory.services;
+package io.github.emfsilva.inventory.services.impl;
 
 import io.github.emfsilva.inventory.dao.ICategoryDao;
 import io.github.emfsilva.inventory.model.Category;
 import io.github.emfsilva.inventory.response.CategoryResponseRest;
+import io.github.emfsilva.inventory.services.ICategoryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
