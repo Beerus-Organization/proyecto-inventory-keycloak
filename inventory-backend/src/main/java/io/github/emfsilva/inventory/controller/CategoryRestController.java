@@ -1,7 +1,7 @@
 package io.github.emfsilva.inventory.controller;
 
 import io.github.emfsilva.inventory.model.Category;
-import io.github.emfsilva.inventory.response.CategoryResponseRest;
+import io.github.emfsilva.inventory.response.rest.CategoryResponseRest;
 import io.github.emfsilva.inventory.services.ICategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
