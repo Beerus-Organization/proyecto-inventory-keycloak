@@ -16,7 +16,7 @@ import java.math.BigDecimal;
 @RequestMapping("/v1/product")
 public class ProductRestController {
 
-    private IProductService productService;
+    private final IProductService productService;
 
     public ProductRestController(IProductService productService) {
         this.productService = productService;
@@ -39,4 +39,13 @@ public class ProductRestController {
         return productService.save(product, categoryID);
     }
 
+    @GetMapping("/products")
+    public ResponseEntity<ProductResponseRest> searchProducts() {
+        return productService.search();
+    }
+
+    @GetMapping("/products/{id}")
+    public ResponseEntity<ProductResponseRest> search(@PathVariable Long id) {
+        return productService.searchById(id);
+    }
 }
