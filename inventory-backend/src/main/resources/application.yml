@@ -8,7 +8,7 @@ spring:
     name: microservices-inventory
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3309/db_inventory_keycloak?createIfNotExists=true&verifyServerCertificate=false&useSSL=false&requireSSL=false
+    url: jdbc:mysql://localhost:3309/db_inventory_keycloak?createIfNotExists=true&verifyServerCertificate=false&useSSL=false&requireSSL=false&jdbcCompliantTruncation=false
     username: docker
     password: docker
   jackson:
@@ -21,11 +21,15 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQL5Dialect
     show-sql: true
+  servlet:
+    multipart:
+      max-file-size: 3MB
+      max-request-size: 3MB
 
 logging:
   level:
-    org.springframework.web: DEBUG
+    #org.springframework.web: DEBUG
     io.github.emfsilva.controller: DEBUG
-    org.hibernate: DEBUG
+    #org.hibernate: DEBUG
     org: INFO
 

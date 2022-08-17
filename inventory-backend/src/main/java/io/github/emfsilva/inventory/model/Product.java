@@ -24,7 +24,9 @@ public class Product implements Serializable {
     @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
     private Category category;
 
-    @Column(name = "picture", length = 1000)
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
+    @Column(name = "picture")
     private byte[] picture;
 
 }
