@@ -4,6 +4,7 @@ import io.github.emfsilva.inventory.dao.ICategoryDao;
 import io.github.emfsilva.inventory.dao.IProductDao;
 import io.github.emfsilva.inventory.model.Category;
 import io.github.emfsilva.inventory.model.Product;
+import io.github.emfsilva.inventory.response.ProductResponse;
 import io.github.emfsilva.inventory.response.rest.ProductResponseRest;
 import io.github.emfsilva.inventory.services.IProductService;
 import io.github.emfsilva.inventory.utils.Util;
@@ -148,5 +149,29 @@ public class ProductServiceImpl implements IProductService {
         }
 
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @Override
+    @Transactional
+    public ResponseEntity<ProductResponseRest> deleteById(Long id) {
+        ProductResponseRest response = new ProductResponseRest();
+
+        try {
+
+            var productSearch = productDao.findById(id);
+            if(productSearch.isPresent()) {
+                productDao.deleteById(id);
+                response.setMetadata("Request OK", "00","Request success" );
+            } else {
+                response.setMetadata("Request NOK", "-1", "Category not found");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+            }
+        }catch (Exception e) {
+            response.setMetadata("Request NOK", "-1", "Error to delete product");
+            LOGGER.info("Error to delete {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
+
+        return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
     }
 }

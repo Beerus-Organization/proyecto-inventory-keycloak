@@ -13,6 +13,9 @@ spring:
     password: docker
   jackson:
     default-property-inclusion: non_null
+  mvc:
+    converters:
+      preferred-json-mapper: gson
   jpa:
     database-platform: org.hibernate.dialect.MySQL5Dialect
     hibernate:

@@ -148,6 +148,6 @@ public class CategoryServiceImpl implements ICategoryService {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
 
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
     }
 }

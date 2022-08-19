@@ -1,6 +1,7 @@
 package io.github.emfsilva.inventory.controller;
 
 import io.github.emfsilva.inventory.model.Product;
+import io.github.emfsilva.inventory.response.ProductResponse;
 import io.github.emfsilva.inventory.response.rest.ProductResponseRest;
 import io.github.emfsilva.inventory.services.IProductService;
 import io.github.emfsilva.inventory.utils.Util;
@@ -52,5 +53,10 @@ public class ProductRestController {
     @GetMapping("/products/filter/{name}")
     public ResponseEntity<ProductResponseRest> searchProductsByName(@PathVariable String name) {
         return productService.searchByName(name);
+    }
+
+    @DeleteMapping("products/{id}")
+    public ResponseEntity<ProductResponseRest> deleteById(@PathVariable Long id){
+        return productService.deleteById(id);
     }
 }
