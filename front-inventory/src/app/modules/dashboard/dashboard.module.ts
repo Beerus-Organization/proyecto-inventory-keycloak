@@ -1,3 +1,4 @@
+import { ProductModule } from './../product/product.module';
 import { CategoryModule } from './../category/category.module';
 import { SharedModule } from './../shared/shared.module';
 import { NgModule } from '@angular/core';
@@ -15,7 +16,8 @@ import { HomeComponent } from './components/home/home.component';
   imports: [
     CommonModule,
     SharedModule,
-    CategoryModule
+    CategoryModule,
+    ProductModule
   ]
 })
 export class DashboardModule { }
