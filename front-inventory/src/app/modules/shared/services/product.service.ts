@@ -15,7 +15,7 @@ export class ProductService {
    *  get All products
    */
   getProducts() {
-    const endpoint = `${base_url}/products`;
+    const endpoint = `${base_url}/product/products`;
     return this.http.get(endpoint);
   }
 }
