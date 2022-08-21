@@ -27,11 +27,30 @@ export class ProductComponent implements OnInit {
     this.productService.getProducts()
     .subscribe({
       next: (data: any) => {
-        console.log("resposta produtos:", data);
+        console.log(data)
+        this.processProductResponse(data);
       }, error: (error: any) => {
         console.log("error", error);
       }
     })
+  }
+
+  processProductResponse(resp : any) {
+    const dateProduct : ProductElement [] = [];
+      if(resp.metadata[0].code == "00") {
+        let listCProduct = resp.product.products;
+
+        listCProduct.forEach((element: ProductElement) => {
+            element.category = element.category.name;
+            element.picture = 'data:image/jpeg;base64,' +element.picture;
+            dateProduct.push(element);
+        });
+
+        // set the datasource
+        this.dataSource = new MatTableDataSource<ProductElement>(dateProduct);
+        this.dataSource.paginator = this.paginator;
+      }
+
   }
 }
 
