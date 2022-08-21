@@ -5,6 +5,7 @@ import io.github.emfsilva.inventory.dao.IProductDao;
 import io.github.emfsilva.inventory.model.Category;
 import io.github.emfsilva.inventory.model.Product;
 import io.github.emfsilva.inventory.response.ProductResponse;
+import io.github.emfsilva.inventory.response.rest.CategoryResponseRest;
 import io.github.emfsilva.inventory.response.rest.ProductResponseRest;
 import io.github.emfsilva.inventory.services.IProductService;
 import io.github.emfsilva.inventory.utils.Util;
@@ -189,4 +190,59 @@ public class ProductServiceImpl implements IProductService {
 
         return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
     }
+
+    @Override
+    @Transactional
+    public ResponseEntity<ProductResponseRest> update(Product product,Long categoryId,  Long id) {
+        ProductResponseRest response = new ProductResponseRest();
+        List<Product> list = new ArrayList<>();
+
+        try {
+            var categorySearch = categoryDao.findById(categoryId);
+
+            if (categorySearch.isPresent()) {
+                product.setCategory(categorySearch.get());
+            } else {
+                response.setMetadata("Request NOK", "-1", "Category not found");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+            }
+
+            // search  product to update
+           var productSearch = productDao.findById(id);
+
+            if(productSearch.isPresent()) {
+
+                // update product
+                productSearch.get().setQuantity(product.getQuantity());
+                productSearch.get().setCategory(product.getCategory());
+                productSearch.get().setName(product.getName());
+                productSearch.get().setPicture(product.getPicture());
+                productSearch.get().setPrice(product.getPrice());
+
+                // save Product in the DB
+                Product productToUpdate = productDao.save(productSearch.get());
+
+                if(productToUpdate != null) {
+                    list.add(productToUpdate);
+                    response.getProduct().setProducts(list);
+                    response.setMetadata("Request OK", "00", "Product updated");
+                } else {
+                    response.setMetadata("Request NOK", "-1", "Error to update product");
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+                }
+
+            } else {
+                response.setMetadata("Request NOK", "-1", "Error to update product");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+            }
+
+        } catch (Exception e) {
+            response.setMetadata("Request NOK", "-1", "Error to update product");
+            LOGGER.info("Error to update {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
 }

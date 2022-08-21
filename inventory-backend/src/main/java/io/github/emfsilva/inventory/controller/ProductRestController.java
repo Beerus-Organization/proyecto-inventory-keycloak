@@ -59,4 +59,23 @@ public class ProductRestController {
     public ResponseEntity<ProductResponseRest> deleteById(@PathVariable Long id){
         return productService.deleteById(id);
     }
+
+   @PutMapping("/products/{id}")
+    public ResponseEntity<ProductResponseRest> update(
+            @RequestParam("picture")MultipartFile picture,
+            @RequestParam("name") String name,
+            @RequestParam("price") BigDecimal price,
+            @RequestParam("quantity") Integer quantity,
+            @RequestParam("categoryId") Long categoryID,
+            @PathVariable Long id) throws IOException
+    {
+        Product product = new Product();
+        product.setName(name);
+        product.setQuantity(quantity);
+        product.setPrice(price);
+        product.setPicture(Util.compressZLib(picture.getBytes()));
+
+        return productService.update(product, categoryID, id);
+    }
+
 }
